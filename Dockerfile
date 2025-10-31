@@ -14,5 +14,6 @@ RUN ./mvnw clean package -DskipTests
 EXPOSE 8081
 
 # Comando para ejecutar la app (ajusta el .jar si tiene otro nombre)
-CMD ["java", "-jar", "target/NutriAI-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/NutriAI-1.0.0.jar"]
+
 
