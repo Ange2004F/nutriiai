@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${titulo}">Panel de Administración</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #0d0d25 0%, #141432 100%);
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #00ffc8;
+      margin-top: 40px;
+      text-shadow: 0 0 15px rgba(0, 255, 200, 0.6);
+      font-size: 2.3rem;
+      letter-spacing: 1px;
+      animation: fadeInDown 1s ease;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(0, 255, 200, 0.4);
+      border-radius: 20px;
+      padding: 40px;
+      width: 75%;
+      max-width: 900px;
+      margin: 40px auto;
+      box-shadow: 0 0 25px rgba(0, 255, 200, 0.25);
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 1s ease;
+    }
+
+    .panel h2 {
+      color: #00ffc8;
+      font-weight: 600;
+      margin-bottom: 25px;
+      text-shadow: 0 0 8px rgba(0, 255, 200, 0.4);
+    }
+
+    .datos {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 255, 200, 0.2);
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin: 20px auto 30px auto;
+      width: 60%;
+      box-shadow: inset 0 0 15px rgba(0, 255, 200, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .datos:hover {
+      box-shadow: inset 0 0 20px rgba(0, 255, 200, 0.3);
+      transform: scale(1.02);
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    .btns {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00bfa6);
+      border: none;
+      color: #0d0d25;
+      padding: 14px 30px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(0, 255, 200, 0.6);
+    }
+
+    /* COLORES PERSONALIZADOS */
+    .report {
+      background: linear-gradient(90deg, #00e0ff, #00a8ff);
+      color: #000;
+    }
+
+    .ia {
+      background: linear-gradient(90deg, #b77cff, #8b5cff);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(183, 124, 255, 0.3);
+    }
+
+    .stats {
+      background: linear-gradient(90deg, #1eff9d, #00b873);
+      color: #000;
+    }
+
+    .feedback {
+      background: linear-gradient(90deg, #ffc94d, #ffae00);
+      color: #000;
+    }
+
+    .logout {
+      background: linear-gradient(90deg, #ff4b4b, #c80000);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 80, 80, 0.3);
+    }
+
+    .logout:hover {
+      box-shadow: 0 0 25px rgba(255, 80, 80, 0.6);
+    }
+
+    .footer {
+      margin-top: 40px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .panel { width: 90%; padding: 25px; }
+      .datos { width: 85%; }
+      button { width: 90%; justify-content: center; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1 th:text="${titulo}">Panel de Administración</h1>
+
+  <div class="panel">
+    <h2 th:text="${mensaje}">Bienvenido al panel de control, Luis Solis 👑</h2>
+
+    <div class="datos">
+      <p>📧 <strong>Correo:</strong> <span th:text="${correo}">admin@nutriai.com</span></p>
+      <p>🧩 <strong>Rol:</strong> <span th:text="${rol}">Administrador</span></p>
+    </div>
+
+    <div class="btns">
+      <button type="button"
+              th:attr="onclick='location.href=\'' + @{/admin/usuarios} + '\''">
+        <i class="fa-solid fa-users"></i> Gestionar Usuarios
+      </button>
+
+      <button type="button" class="report"
+              th:attr="onclick='location.href=\'' + @{/admin/reportes} + '\''">
+        <i class="fa-solid fa-chart-line"></i> Ver Reportes
+      </button>
+
+      <button type="button" class="stats"
+              th:attr="onclick='location.href=\'' + @{/admin/estadisticas} + '\''">
+        <i class="fa-solid fa-chart-pie"></i> Panel de Estadísticas
+      </button>
+
+      <button type="button" class="feedback"
+              th:attr="onclick='location.href=\'' + @{/admin/sugerencias} + '\''">
+        <i class="fa-solid fa-comments"></i> Sugerencias y Comentarios
+      </button>
+
+      <button type="button" class="ia"
+              th:attr="onclick='location.href=\'' + @{/admin/consultas-ia} + '\''">
+        <i class="fa-solid fa-brain"></i> Consultas IA
+      </button>
+
+      <button type="button" class="logout"
+              th:attr="onclick='location.href=\'' + @{/logout} + '\''">
+        <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+      </button>
+    </div>
+
+    <p class="footer">NutriAI © 2025 — Panel de Control del Administrador</p>
+  </div>
+
+</body>
+</html>

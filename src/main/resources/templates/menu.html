@@ -1,0 +1,180 @@
+<div th:fragment="menu">
+  <style>
+    /* === SIDEBAR PRINCIPAL === */
+    .sidebar {
+      width: 250px;
+      background: rgba(10, 10, 30, 0.95);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 25px 18px;
+      box-shadow: 2px 0 20px rgba(0,255,200,0.3);
+      border-right: 1px solid rgba(0,255,200,0.4);
+      overflow: hidden;
+      transition: width 0.4s ease, padding 0.4s ease, background 0.4s ease;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+    }
+
+    .sidebar.cerrado {
+      width: 0;
+      padding: 25px 0;
+      overflow: hidden;
+    }
+
+    .sidebar h2 {
+      color: #00ffc8;
+      text-align: center;
+      font-size: 22px;
+      margin: 0 0 25px;
+      text-shadow: 0 0 10px rgba(0,255,200,0.4);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li {
+      margin: 12px 0;
+    }
+
+    .sidebar ul li a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar ul li a:hover {
+      background: linear-gradient(90deg, #00ffc8 0%, #00bfff 100%);
+      color: #0d0d25;
+      font-weight: bold;
+      transform: translateX(5px);
+      box-shadow: 0 0 10px rgba(0,255,200,0.5);
+    }
+
+    .sidebar ul li a.activo {
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(0,255,200,0.6);
+    }
+
+    .sidebar ul li a.logout {
+      color: #ff5c5c;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar ul li a.logout:hover {
+      background: #ff5c5c;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255,92,92,0.4);
+    }
+
+   
+    .toggle-menu {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #111;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 2000;
+      font-weight: bold;
+      box-shadow: 0 0 12px rgba(0,255,200,0.6);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .toggle-menu:hover {
+      background: linear-gradient(90deg, #00d4aa, #00aaff);
+      transform: scale(1.05);
+    }
+
+    
+    .contenido {
+      margin-left: 270px;
+      transition: margin-left 0.4s ease;
+      padding: 30px;
+    }
+
+    .sidebar.cerrado ~ .contenido {
+      margin-left: 40px !important;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 220px;
+      }
+
+      .contenido {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .toggle-menu {
+        top: 10px;
+        left: 10px;
+      }
+    }
+  </style>
+
+ 
+  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+
+ 
+  <div class="sidebar" id="sidebar">
+    <h2>NutriAI 🧠</h2>
+    <ul>
+      <li><a th:href="@{/bienvenido}" th:classappend="${page=='inicio'} ? 'activo'">🏠 Inicio</a></li>
+      <li><a th:href="@{/perfil}" th:classappend="${page=='perfil'} ? 'activo'">🙍 Perfil</a></li>
+      <li><a th:href="@{/progreso}" th:classappend="${page=='progreso'} ? 'activo'">📈 Progreso</a></li>
+      <li><a th:href="@{/historial}" th:classappend="${page=='historial'} ? 'activo'">🕒 Historial</a></li>
+      <li><a th:href="@{/plan}" th:classappend="${page=='plan'} ? 'activo'">🗓 Plan Semanal</a></li>
+      <li><a th:href="@{/asistente}" th:classappend="${page=='asistente'} ? 'activo'">💬 Asistente IA</a></li>
+      <li th:if="${mostrarExportar}">
+        <a th:href="@{/exportarPDF}" th:classappend="${page=='exportar'} ? 'activo'">📄 Exportar PDF</a>
+      </li>
+      <li><a th:href="@{/configuracion}" th:classappend="${page=='configuracion'} ? 'activo'">⚙️ Configuración</a></li>
+      <li><a th:href="@{/logout}" class="logout">🔴 Cerrar sesión</a></li>
+    </ul>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const sidebar = document.querySelector('.sidebar');
+      const contenido = document.querySelector('.contenido');
+      const estado = localStorage.getItem('sidebarEstado');
+
+      if (estado === 'cerrado') {
+        sidebar.classList.add('cerrado');
+        if (contenido) contenido.style.marginLeft = "40px";
+      }
+
+     
+      window.toggleSidebar = function() {
+        sidebar.classList.toggle('cerrado');
+        if (sidebar.classList.contains('cerrado')) {
+          if (contenido) contenido.style.marginLeft = "40px";
+          localStorage.setItem('sidebarEstado', 'cerrado');
+        } else {
+          if (contenido) contenido.style.marginLeft = "270px";
+          localStorage.setItem('sidebarEstado', 'abierto');
+        }
+      }
+    });
+  </script>
+</div>

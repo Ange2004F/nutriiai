@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Reportes del Sistema - NutriAI</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #00ffc8;
+            text-align: center;
+            margin-top: 40px;
+            text-shadow: 0 0 8px rgba(0, 255, 200, 0.5);
+        }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(0,255,200,0.4);
+            box-shadow: 0 0 20px rgba(0,255,200,0.2);
+            padding: 40px;
+            backdrop-filter: blur(6px);
+        }
+
+        .tarjetas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .tarjeta {
+            background: rgba(255,255,255,0.08);
+            border-radius: 14px;
+            border: 1px solid rgba(0,255,200,0.4);
+            box-shadow: 0 0 10px rgba(0,255,200,0.3);
+            padding: 25px;
+            width: 220px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0,255,200,0.6);
+        }
+
+        .tarjeta h3 {
+            color: #00ffc8;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tarjeta p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin: 5px 0 0 0;
+        }
+
+        .mensaje {
+            text-align: center;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 15px;
+        }
+
+        .mensaje-error {
+            color: #ff6666;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 30px;
+            background: #00ffc8;
+            color: #111;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .boton:hover {
+            background: #00ccaa;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0,255,200,0.6);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .contenedor {
+                width: 90%;
+                padding: 25px;
+            }
+
+            .tarjeta {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tarjeta {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h1 th:text="${titulo}">Reportes del Sistema</h1>
+    <p class="mensaje" th:text="${mensaje}">Aquí puedes ver el resumen general del sistema.</p>
+    <p th:if="${error != null}" class="mensaje-error" th:text="${error}"></p>
+
+    <div class="tarjetas">
+        <div class="tarjeta">
+            <h3>👥 Usuarios Totales</h3>
+            <p th:text="${totalUsuarios}">0</p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>🧩 Roles Registrados</h3>
+            <p th:text="${totalRoles}">0</p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>🍽 Planes Alimenticios</h3>
+            <p th:text="${totalPlanes}">0</p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>📈 Registros de Progreso</h3>
+            <p th:text="${totalProgresos}">0</p>
+        </div>
+    </div>
+
+    <div style="text-align:center;">
+        <a th:href="@{/admin}" class="boton">⬅ Volver al Panel</a>
+    </div>
+</div>
+
+<footer>NutriAI © 2025 — Reportes del Sistema</footer>
+
+</body>
+</html>

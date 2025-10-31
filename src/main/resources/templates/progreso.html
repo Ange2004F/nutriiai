@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 Progreso - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    
+    .contenido {
+      flex: 1;
+      margin-left: 260px;
+      padding: 40px;
+      transition: margin-left 0.4s ease;
+      text-align: center;
+    }
+
+    h2 {
+      color: #00ffc8;
+      font-size: 26px;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+      margin-bottom: 25px;
+    }
+
+   
+    table {
+      width: 85%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,255,200,0.2);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+    }
+
+    th {
+      background: #00ffc8;
+      color: #0d0d25;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.03);
+    }
+
+    tr:hover {
+      background-color: rgba(0,255,200,0.1);
+      transition: 0.3s ease;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+   
+    .empty-msg {
+      text-align: center;
+      color: #bbb;
+      margin-top: 40px;
+      font-style: italic;
+    }
+
+    
+    .volver-panel {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #222;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      border: 1px solid #00ffc8;
+    }
+
+    .volver-panel:hover {
+      background-color: #00ffc8;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0,255,200,0.5);
+    }
+
+  
+    .sidebar {
+      width: 250px;
+      background-color: rgba(5, 0, 20, 0.95);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      box-shadow: 2px 0 15px #00ffc8;
+      overflow: hidden;
+      transition: width 0.4s ease, padding 0.4s ease;
+      z-index: 1000;
+    }
+
+    .sidebar.cerrado {
+      width: 0;
+      padding: 20px 0;
+    }
+
+  
+    .toggle-menu {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #00ffc8;
+      color: #111;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 2000;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,255,200,0.6);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .toggle-menu:hover {
+      background-color: #00d4aa;
+      transform: scale(1.05);
+    }
+
+    
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+      padding: 15px 0;
+      margin-left: 260px;
+      border-top: 1px solid rgba(0,255,200,0.2);
+      background: rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 0 15px rgba(0,255,200,0.15);
+    }
+
+    
+    .sidebar.cerrado + .contenido + footer {
+      margin-left: 40px;
+      transition: margin-left 0.4s ease;
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div th:replace="menu :: menu"></div>
+
+  
+  <div class="contenido">
+    <h2><i class="fas fa-chart-line"></i> Progreso de Consumo</h2>
+
+    
+    <div th:if="${#lists.isEmpty(historial)}">
+      <p class="empty-msg">No hay datos de consumo registrados aún.</p>
+    </div>
+
+   
+    <table th:if="${!#lists.isEmpty(historial)}">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Calorías</th>
+          <th>Proteínas (g)</th>
+          <th>Carbohidratos (g)</th>
+          <th>Grasas (g)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="dia : ${historial}">
+          <td th:text="${dia.fecha}"></td>
+          <td th:text="${dia.calorias}"></td>
+          <td th:text="${dia.proteinas}"></td>
+          <td th:text="${dia.carbohidratos}"></td>
+          <td th:text="${dia.grasas}"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <a href="/bienvenido" class="volver-panel">🔙 Volver al inicio</a>
+  </div>
+
+  
+  <footer>NutriAI © 2025 — Tu salud, nuestra prioridad</footer>
+
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const sidebar = document.querySelector('.sidebar');
+      const contenido = document.querySelector('.contenido');
+      const estadoGuardado = localStorage.getItem('sidebarEstado');
+
+      if (estadoGuardado === 'cerrado') {
+        sidebar.classList.add('cerrado');
+        contenido.style.marginLeft = "40px";
+      } else {
+        sidebar.classList.remove('cerrado');
+        contenido.style.marginLeft = "260px";
+      }
+    });
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const contenido = document.querySelector('.contenido');
+      sidebar.classList.toggle('cerrado');
+
+      if (sidebar.classList.contains('cerrado')) {
+        contenido.style.marginLeft = "40px";
+        localStorage.setItem('sidebarEstado', 'cerrado');
+      } else {
+        contenido.style.marginLeft = "260px";
+        localStorage.setItem('sidebarEstado', 'abierto');
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Bienvenido - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .contenido { margin-left: 260px; padding: 40px; transition: margin-left 0.4s ease; }
+    h2 { color: #00ffc8; text-shadow: 0 0 10px rgba(0,255,200,0.5); margin-bottom: 20px; }
+    p { max-width: 800px; line-height: 1.6; color: #cfcfcf; font-size: 15px; }
+    .macros { margin-top: 40px; }
+
+    .macro-box {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 8px 20px;
+      margin: 18px 0;
+      box-shadow: 0 0 8px rgba(0,255,200,0.2);
+      height: 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .macro-box strong {
+      font-size: 14px;
+      position: relative;
+      z-index: 2;
+    }
+    .macro-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      width: 0%;
+      transition: width 1s ease-in-out;
+      opacity: 0.3;
+    }
+    .macro-info {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #ddd;
+    }
+
+    .seccion {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 0 10px rgba(0,255,200,0.3);
+    }
+
+    .seccion h3 { color: #00ffc8; margin-bottom: 10px; }
+
+    .acciones { margin-top: 25px; display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .btn {
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,255,200,0.4);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .btn:hover { transform: scale(1.05); background: linear-gradient(90deg, #00d4aa, #00aaff); }
+
+    .footer { text-align: center; margin-top: 60px; opacity: 0.7; font-size: 13px; color: #bbb; }
+
+    .acciones-comida {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+ 
+  <div th:replace="~{menu :: menu}"></div>
+
+  <div class="contenido">
+    <h2>👋 ¡Hola, <span th:text="${usuario.nombres}"></span>!</h2>
+
+   
+    <div th:if="${kcalRecomendadas != null}">
+     <p>Calorías recomendadas:
+  <span th:text="${#numbers.formatDecimal(usuario.kcalDiarias, 0, 0)}"></span>
+</p>
+<p>Proteínas:
+  <span th:text="${#numbers.formatDecimal(usuario.proteinas, 0, 0)}"></span>
+</p>
+<p>Carbohidratos:
+  <span th:text="${#numbers.formatDecimal(usuario.carbohidratos, 0, 0)}"></span>
+</p>
+<p>Grasas:
+  <span th:text="${#numbers.formatDecimal(usuario.grasas, 0, 0)}"></span>
+</p>
+
+    </div>
+
+    <p th:if="${kcalRecomendadas == null}" style="color:#ff8080;">
+      ❌ No se pudieron obtener las calorías recomendadas. Intenta más tarde.
+    </p>
+
+    <!-- Barras de macros -->
+    <div class="macros">
+      <div class="macro-box">
+        <div class="macro-bar" id="barProteinas"></div>
+        <strong>Proteínas</strong>
+        <div class="macro-info">
+          <span th:text="${protConsumidas != null ? protConsumidas : 0} + ' g'"></span>
+          <span th:text="'Meta: ' + ((${kcalRecomendadas?.get('proteinas_g')} ?: 0)) + ' g'"></span>
+        </div>
+      </div>
+
+      <div class="macro-box">
+        <div class="macro-bar" id="barCarbohidratos"></div>
+        <strong>Carbohidratos</strong>
+        <div class="macro-info">
+          <span th:text="${carbConsumidas != null ? carbConsumidas : 0} + ' g'"></span>
+          <span th:text="'Meta: ' + ((${kcalRecomendadas?.get('carbohidratos_g')} ?: 0)) + ' g'"></span>
+        </div>
+      </div>
+
+      <div class="macro-box">
+        <div class="macro-bar" id="barGrasas"></div>
+        <strong>Grasas</strong>
+        <div class="macro-info">
+          <span th:text="${grasConsumidas != null ? grasConsumidas : 0} + ' g'"></span>
+          <span th:text="'Meta: ' + ((${kcalRecomendadas?.get('grasas_g')} ?: 0)) + ' g'"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <h3>🍳 Desayuno</h3>
+      <p th:if="${comidas.desayuno == null or #lists.isEmpty(comidas.desayuno)}">No hay alimentos registrados.</p>
+      <ul>
+        <li th:each="a : ${comidas.desayuno}" th:text="${a.nombre} + ' - ' + ${a.calorias} + ' kcal'"></li>
+      </ul>
+      <div class="acciones-comida">
+        <button class="btn" onclick="location.href='/agregarAlimento'">➕ Agregar alimento</button>
+        <button class="btn" onclick="location.href='/analizar-foto'">📸 Foto</button>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <h3>🍽 Comida</h3>
+      <p th:if="${comidas.comida == null or #lists.isEmpty(comidas.comida)}">No hay alimentos registrados.</p>
+      <ul>
+        <li th:each="a : ${comidas.comida}" th:text="${a.nombre} + ' - ' + ${a.calorias} + ' kcal'"></li>
+      </ul>
+      <div class="acciones-comida">
+        <button class="btn" onclick="location.href='/agregarAlimento'">➕ Agregar alimento</button>
+        <button class="btn" onclick="location.href='/analizar-foto'">📸 Foto</button>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <h3>🌙 Cena</h3>
+      <p th:if="${comidas.cena == null or #lists.isEmpty(comidas.cena)}">No hay alimentos registrados.</p>
+      <ul>
+        <li th:each="a : ${comidas.cena}" th:text="${a.nombre} + ' - ' + ${a.calorias} + ' kcal'"></li>
+      </ul>
+      <div class="acciones-comida">
+        <button class="btn" onclick="location.href='/agregarAlimento'">➕ Agregar alimento</button>
+        <button class="btn" onclick="location.href='/analizar-foto'">📸 Foto</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      NutriAI © 2025 — Panel Personalizado de Usuario
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const data = [
+        { id: 'barProteinas', total: parseFloat(document.querySelector('[th\\:text*="protConsumidas"]')?.innerText) || 0 },
+        { id: 'barCarbohidratos', total: parseFloat(document.querySelector('[th\\:text*="carbConsumidas"]')?.innerText) || 0 },
+        { id: 'barGrasas', total: parseFloat(document.querySelector('[th\\:text*="grasConsumidas"]')?.innerText) || 0 }
+      ];
+      data.forEach(d => {
+        const el = document.getElementById(d.id);
+        if (el) el.style.width = Math.min(d.total, 100) + '%';
+      });
+    });
+  </script>
+
+</body>
+</html>

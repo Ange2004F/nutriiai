@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📄 Exportar PDF - NutriAI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .contenedor {
+      background: rgba(255,255,255,0.05);
+      padding: 40px 50px;
+      border-radius: 18px;
+      text-align: center;
+      border: 1px solid rgba(0,195,255,0.5);
+      box-shadow: 0 0 25px rgba(0,195,255,0.2);
+      backdrop-filter: blur(8px);
+      animation: aparecer 0.7s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: #ff6ec7;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255,110,199,0.5);
+    }
+
+    p {
+      color: #d1d1d1;
+      font-size: 1.05rem;
+      margin-bottom: 25px;
+    }
+
+    a.boton {
+      display: inline-block;
+      padding: 14px 28px;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #111;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 12px rgba(0,255,200,0.4);
+    }
+
+    a.boton:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 18px rgba(0,255,200,0.6);
+      background: linear-gradient(90deg, #00e0ff, #00ff88);
+    }
+
+    .volver-panel {
+      display: inline-block;
+      margin-top: 25px;
+      color: #00ffc8;
+      font-weight: bold;
+      text-decoration: none;
+      border: 1px solid rgba(0,255,200,0.5);
+      padding: 10px 20px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    .volver-panel:hover {
+      background-color: #00ffc8;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .contenedor {
+        width: 90%;
+        padding: 30px;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      a.boton {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+    <h1>📄 Exportar Resumen Nutricional</h1>
+    <p>Genera y descarga tu reporte personalizado en formato PDF con tus datos nutricionales actuales.</p>
+    
+    <a class="boton" th:href="@{/exportar/pdf}" target="_blank">⬇ Descargar PDF</a>
+    
+    <br>
+    <a th:href="@{/bienvenido}" class="volver-panel">🔙 Volver al inicio</a>
+  </div>
+
+  <footer>NutriAI © 2025 — Exportador de Reportes Nutricionales</footer>
+
+</body>
+</html>

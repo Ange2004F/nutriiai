@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - NutriAI</title>
+    <style>
+        body {
+            background: linear-gradient(180deg, #0d0d25, #1a1a3d);
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(26, 26, 61, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.6);
+            border: 1px solid rgba(0, 255, 200, 0.3);
+            backdrop-filter: blur(6px);
+        }
+        h2 {
+            color: #00ffc8;
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        input {
+            background: #2c2c54;
+            color: white;
+        }
+        input:focus {
+            box-shadow: 0 0 5px #00ffc8;
+        }
+        button {
+            background: #00ffc8;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #00d4aa;
+            transform: scale(1.03);
+        }
+        .mensaje {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #ff8080;
+        }
+        .volver {
+            display: inline-block;
+            margin-top: 20px;
+            color: #00ffc8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .volver:hover {
+            color: #00d4aa;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>🔑 Recuperar Contraseña</h2>
+    <form th:action="@{/recuperar}" method="post">
+        <input type="email" name="correo" placeholder="Ingresa tu correo electrónico" required>
+        <button type="submit">Enviar enlace</button>
+    </form>
+
+    
+    <p class="mensaje" th:if="${mensaje != null}" th:text="${mensaje}"></p>
+
+    <a class="volver" th:href="@{/login}">← Volver al inicio de sesión</a>
+</div>
+</body>
+</html>

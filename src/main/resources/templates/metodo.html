@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚙️ Método - NutriAI</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+   
+    .barra-progreso {
+      width: 85%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 35px;
+      box-shadow: 0 0 10px rgba(0,255,200,0.3);
+    }
+
+    .barra-progreso span {
+      display: block;
+      height: 100%;
+      width: 66%;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,255,200,0.6);
+      animation: carga 2s ease-out;
+    }
+
+    @keyframes carga {
+      from { width: 0; }
+      to { width: 66%; }
+    }
+
+   
+    .contenedor {
+      background: rgba(10,10,30,0.9);
+      padding: 40px 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(0,255,200,0.3);
+      border: 1px solid rgba(0,255,200,0.4);
+      max-width: 420px;
+      width: 90%;
+      z-index: 2;
+      backdrop-filter: blur(10px);
+      animation: aparecer 1s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #00ffc8;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    p {
+      color: #bbb;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+
+   
+    .opcion {
+      background: rgba(255,255,255,0.05);
+      padding: 16px 20px;
+      margin: 12px 0;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,200,0.4);
+      color: white;
+      width: 100%;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,255,200,0.2);
+    }
+
+    .opcion strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 6px;
+      color: #00ffc8;
+    }
+
+    .opcion small {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .opcion:hover {
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      box-shadow: 0 0 25px rgba(0,255,200,0.5);
+      transform: scale(1.03);
+    }
+
+    footer {
+      margin-top: 40px;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .contenedor {
+        padding: 30px 20px;
+      }
+      h2 { font-size: 22px; }
+      .opcion strong { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="barra-progreso">
+    <span></span>
+  </div>
+
+  <div class="contenedor">
+    <h2>⚙️ ¿Cómo deseas conseguirlo?</h2>
+    <p>Selecciona tu método preferido para iniciar tu experiencia con NutriAI</p>
+
+    <form th:action="@{/config/guardar-metodo}" method="post">
+      <button class="opcion" type="submit" name="metodo" value="plan">
+        <strong>Necesito un plan nutricional</strong>
+        <small>No sé qué comer. Quiero que NutriAI me recomiende comidas balanceadas.</small>
+      </button>
+
+      <button class="opcion" type="submit" name="metodo" value="contar">
+        <strong>Necesito contar mis calorías</strong>
+        <small>Ya tengo una idea de qué comer, pero deseo monitorear mis calorías y macros.</small>
+      </button>
+    </form>
+  </div>
+
+  <footer>NutriAI © 2025 — Tu Asistente Nutricional Inteligente</footer>
+</body>
+</html>

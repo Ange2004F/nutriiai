@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriAI - Bienvenido</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25, #1a1a3d);
+      color: white;
+      overflow: hidden;
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      background: rgba(15, 15, 35, 0.9);
+      padding: 50px 30px;
+      border-radius: 25px;
+      box-shadow:
+        0 0 20px rgba(0, 255, 128, 0.2),
+        0 0 40px rgba(0, 128, 255, 0.2),
+        0 0 70px rgba(255, 0, 128, 0.15);
+      border: 1px solid rgba(0,255,200,0.3);
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      margin: 12vh auto;
+      backdrop-filter: blur(14px);
+      transition: all 0.4s ease-in-out;
+      animation: aparecer 1s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow:
+        0 0 30px rgba(0, 255, 128, 0.3),
+        0 0 60px rgba(0, 128, 255, 0.25),
+        0 0 90px rgba(255, 0, 128, 0.2);
+    }
+
+    .logo-img {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 150px;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(0,255,200,0.6);
+      animation: resplandor 3s ease-in-out infinite;
+    }
+
+    @keyframes resplandor {
+      0%, 100% { box-shadow: 0 0 15px rgba(0,255,200,0.3); }
+      50% { box-shadow: 0 0 35px rgba(0,255,200,0.8); }
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #00ffc8;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+      margin: 10px 0 8px;
+    }
+
+    p#frase {
+      font-style: italic;
+      color: #ccc;
+      margin-bottom: 25px;
+      min-height: 24px;
+      transition: opacity 0.6s ease;
+    }
+
+    .btn {
+      padding: 14px 25px;
+      margin: 10px 8px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      letter-spacing: 0.5px;
+    }
+
+    .btn-login {
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+    }
+
+    .btn-register {
+      background: linear-gradient(90deg, #ff66c4, #ffb347);
+      color: #0d0d25;
+    }
+
+    .btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .fondo-frutas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .fruta {
+      position: absolute;
+      font-size: 32px;
+      opacity: 0.2;
+      animation: flotar 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes flotar {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); }
+      25% { transform: translateY(-40px) translateX(30px) rotate(15deg); }
+      50% { transform: translateY(-80px) translateX(-20px) rotate(-20deg); }
+      75% { transform: translateY(-40px) translateX(15px) rotate(10deg); }
+      100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="fondo-frutas" id="fondo-frutas"></div>
+
+<div class="card">
+  <img th:src="@{/imagenes/logo_nutriai.png}" alt="Logo NutriAI" class="logo-img">
+  <h1 id="saludo">¡Bienvenido a NutriAI!</h1>
+  <p id="frase">Cargando...</p>
+
+  <a th:href="@{/login}">
+    <button class="btn btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</button>
+  </a>
+  <a th:href="@{/registro}">
+    <button class="btn btn-register"><i class="fas fa-user-plus"></i> Registrarse</button>
+  </a>
+</div>
+
+<footer>NutriAI © 2025 — Tu Asistente Nutricional Inteligente</footer>
+
+<script>
+const frutas = ["🍎","🍌","🍇","🍓","🥝","🍍","🥑","🍒","🍉","🍑","🥦","🥕","🍊","🍋"];
+const fondo = document.getElementById("fondo-frutas");
+for (let i = 0; i < 25; i++) {
+  const fruta = document.createElement("span");
+  fruta.classList.add("fruta");
+  fruta.style.top = Math.random() * 100 + "%";
+  fruta.style.left = Math.random() * 100 + "%";
+  fruta.style.animationDelay = Math.random() * 10 + "s";
+  fruta.textContent = frutas[i % frutas.length];
+  fondo.appendChild(fruta);
+}
+
+const frases = [
+  "Tu salud es tu riqueza más grande.",
+  "Come bien, vive mejor.",
+  "NutriAI cuida de ti cada día.",
+  "Tu cuerpo es tu templo, aliméntalo bien.",
+  "Pequeños cambios, grandes resultados."
+];
+let i = 0;
+const fraseElem = document.getElementById("frase");
+fraseElem.textContent = frases[0];
+i++;
+setInterval(() => {
+  fraseElem.style.opacity = 0;
+  setTimeout(() => {
+    fraseElem.textContent = frases[i % frases.length];
+    fraseElem.style.opacity = 1;
+    i++;
+  }, 600);
+}, 4000);
+
+const hora = new Date().getHours();
+let saludo = "¡Hola!";
+if (hora >= 6 && hora < 12) saludo = "¡Buenos días!";
+else if (hora >= 12 && hora < 18) saludo = "¡Buenas tardes!";
+else saludo = "¡Buenas noches!";
+document.getElementById("saludo").textContent = `${saludo} Bienvenido a NutriAI`;
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</body>
+</html>

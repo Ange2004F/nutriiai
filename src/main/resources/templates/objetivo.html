@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Selecciona tu objetivo - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .barra-progreso {
+      width: 85%;
+      height: 6px;
+      background-color: rgba(255,255,255,0.15);
+      margin-bottom: 35px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+    }
+
+    .barra-progreso span {
+      display: block;
+      height: 100%;
+      width: 33%;
+      background: linear-gradient(90deg, #ffcc00, #ffaa00);
+      animation: llenar 1.5s ease-out;
+    }
+
+    @keyframes llenar {
+      from { width: 0; }
+      to { width: 33%; }
+    }
+
+    .contenedor {
+      width: 90%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 30px 35px;
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    h2 {
+      color: #ffcc00;
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255,204,0,0.4);
+    }
+
+    p {
+      color: #ccc;
+      margin-bottom: 25px;
+      font-size: 15px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .opcion {
+      background-color: rgba(255,255,255,0.08);
+      padding: 16px 20px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .opcion strong {
+      display: block;
+      font-size: 18px;
+      color: #ffcc00;
+      margin-bottom: 4px;
+    }
+
+    .opcion small {
+      color: #bbb;
+    }
+
+    .opcion::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255,204,0,0.3), rgba(255,204,0,0));
+      transition: all 0.4s ease;
+    }
+
+    .opcion:hover::before {
+      left: 100%;
+    }
+
+    .opcion:hover {
+      transform: scale(1.03);
+      border-color: #ffcc00;
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    footer {
+      margin-top: 35px;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+    }
+
+    .emoji {
+      font-size: 22px;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="barra-progreso">
+    <span></span>
+  </div>
+
+  <div class="contenedor">
+    <h2>🎯 ¿Cuál es tu objetivo?</h2>
+    <p>Selecciona tu meta y NutriAI calculará tus calorías ideales.</p>
+
+    <form th:action="@{/config/guardar-objetivo}" method="post">
+      <button class="opcion" type="submit" name="objetivo" value="perder_grasa">
+        <strong><span class="emoji">🔥</span>Perder Grasa</strong>
+        <small>Optimiza la pérdida de peso y conserva tu masa muscular</small>
+      </button>
+
+      <button class="opcion" type="submit" name="objetivo" value="ganar_musculo">
+        <strong><span class="emoji">💪</span>Ganar Músculo</strong>
+        <small>Incrementa tu peso y mejora tu fuerza física</small>
+      </button>
+
+      <button class="opcion" type="submit" name="objetivo" value="mantener_peso">
+        <strong><span class="emoji">⚖️</span>Mantener Peso</strong>
+        <small>Equilibra tu ingesta y mantén una composición corporal saludable</small>
+      </button>
+    </form>
+  </div>
+
+  <footer>NutriAI © 2025 — Definiendo tus metas inteligentes</footer>
+
+</body>
+</html>

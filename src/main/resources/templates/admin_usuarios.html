@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${titulo}">Gestión de Usuarios - NutriAI</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #0d0d25 0%, #141432 100%);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      color: #00ffc8;
+      margin-top: 40px;
+      font-size: 2.3rem;
+      text-shadow: 0 0 15px rgba(0,255,200,0.6);
+      letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+      animation: fadeInDown 1s ease;
+    }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(90deg, #00ffc8, transparent);
+      bottom: -6px;
+      left: 20%;
+      border-radius: 2px;
+      box-shadow: 0 0 10px #00ffc8;
+    }
+
+    .mensaje {
+      color: rgba(255,255,255,0.8);
+      margin: 15px 0 30px 0;
+      font-size: 1.05rem;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      border-radius: 15px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,200,0.3);
+      box-shadow: 0 0 25px rgba(0,255,200,0.2);
+      animation: fadeInUp 1s ease;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: #00ffc8;
+      background: rgba(0,255,200,0.08);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255,255,255,0.03);
+    }
+
+    tr:hover {
+      background: rgba(0,255,200,0.12);
+      transition: background 0.3s ease;
+    }
+
+    .volver {
+      display: inline-block;
+      margin: 35px auto 50px auto;
+      background: linear-gradient(90deg, #00ffc8, #00bfa6);
+      color: #0d0d25;
+      padding: 13px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(0,255,200,0.3);
+    }
+
+    .volver:hover {
+      background: linear-gradient(90deg, #00bfa6, #00ffc8);
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(0,255,200,0.6);
+    }
+
+    footer {
+      margin-top: auto;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      padding-bottom: 15px;
+    }
+
+    @media (max-width: 900px) {
+      table { width: 95%; font-size: 0.85rem; }
+      th, td { padding: 10px; }
+    }
+
+    @media (max-width: 600px) {
+      table { display: block; overflow-x: auto; white-space: nowrap; border-radius: 10px; }
+      th, td { font-size: 0.8rem; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1 th:text="${titulo}">Gestión de Usuarios</h1>
+  <p class="mensaje" th:text="${mensaje}">Aquí podrás visualizar y administrar los usuarios del sistema 🧠</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre Completo</th>
+        <th>Correo</th>
+        <th>Sexo</th>
+        <th>Edad</th>
+        <th>Peso (kg)</th>
+        <th>Altura (cm)</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="u : ${usuarios}">
+        <td th:text="${u.id}"></td>
+        <td th:text="${u.nombres + ' ' + u.apellidos}"></td>
+        <td th:text="${u.correo}"></td>
+        <td th:text="${u.sexo}"></td>
+        <td th:text="${u.edad}"></td>
+        <td th:text="${u.peso}"></td>
+        <td th:text="${u.altura}"></td>
+        <td th:text="${u.rol}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a class="volver" th:href="@{/admin}">⬅ Volver al Panel</a>
+
+  <footer>NutriAI © 2025 — Gestión de Usuarios</footer>
+
+</body>
+</html>

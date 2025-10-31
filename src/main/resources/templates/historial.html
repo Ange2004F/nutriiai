@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📜 Historial de Consumo - NutriAI</title>
+
+ 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    
+    .sidebar {
+      width: 250px;
+      background-color: rgba(5, 0, 20, 0.95);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      box-shadow: 2px 0 15px #00ffc8;
+      overflow: hidden;
+      transition: width 0.4s ease, padding 0.4s ease;
+      z-index: 1000;
+    }
+
+    .sidebar.cerrado {
+      width: 0;
+      padding: 20px 0;
+    }
+
+    
+    .contenido {
+      flex: 1;
+      margin-left: 260px;
+      padding: 40px;
+      transition: margin-left 0.4s ease;
+      text-align: center;
+    }
+
+    .sidebar.cerrado + .contenido {
+      margin-left: 40px;
+    }
+
+    h2 {
+      color: #00ffc8;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+      font-size: 26px;
+      margin-bottom: 30px;
+    }
+
+    
+    .dia {
+      background: rgba(255,255,255,0.05);
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,255,200,0.4);
+      box-shadow: 0 0 20px rgba(0,255,200,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .dia:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px rgba(0,255,200,0.4);
+    }
+
+    .dia h3 {
+      margin-bottom: 12px;
+      color: #ffca28;
+      font-size: 1.2rem;
+      text-shadow: 0 0 6px rgba(255,202,40,0.3);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    li strong {
+      color: #00ffc8;
+    }
+
+    .datos {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+   
+    .empty-msg {
+      text-align: center;
+      color: #bbb;
+      margin-top: 3rem;
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+  
+    .volver-panel {
+      display: inline-block;
+      margin-top: 25px;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: rgba(255,255,255,0.05);
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,200,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .volver-panel:hover {
+      background-color: #00ffc8;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0,255,200,0.5);
+    }
+
+    
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+      padding: 15px 0;
+      margin-left: 260px;
+      border-top: 1px solid rgba(0,255,200,0.2);
+      background: rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 0 15px rgba(0,255,200,0.15);
+      transition: margin-left 0.4s ease;
+    }
+
+    .sidebar.cerrado + .contenido + footer {
+      margin-left: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .contenido {
+        margin-left: 20px;
+        padding: 20px;
+      }
+      .dia {
+        width: 100%;
+        padding: 20px;
+      }
+      footer {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div th:replace="menu :: menu"></div>
+
+  <div class="contenido">
+    <h2><i class="fas fa-scroll"></i> Historial de Alimentos Registrados</h2>
+    <div th:if="${#lists.isEmpty(historial)}">
+      <p class="empty-msg">No hay datos registrados en el historial.</p>
+    </div>
+
+    <div th:each="alimento : ${historial}" class="dia">
+      <h3 th:text="${alimento.fecha}">Fecha</h3>
+      <ul>
+        <li>
+          <strong>Alimento:</strong> <span th:text="${alimento.alimento}"></span>
+          <div class="datos">
+            kcal: <span th:text="${alimento.calorias}"></span> |
+            proteínas: <span th:text="${alimento.proteinas}"></span> g |
+            carbohidratos: <span th:text="${alimento.carbohidratos}"></span> g |
+            grasas: <span th:text="${alimento.grasas}"></span> g
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <a th:href="@{/bienvenido}" class="volver-panel">🔙 Volver al inicio</a>
+  </div>
+
+  <footer>NutriAI © 2025 — Historial Nutricional del Usuario</footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const sidebar = document.querySelector('.sidebar');
+      const contenido = document.querySelector('.contenido');
+      const estadoGuardado = localStorage.getItem('sidebarEstado');
+
+      if (estadoGuardado === 'cerrado') {
+        sidebar.classList.add('cerrado');
+        contenido.style.marginLeft = "40px";
+      } else {
+        sidebar.classList.remove('cerrado');
+        contenido.style.marginLeft = "260px";
+      }
+    });
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const contenido = document.querySelector('.contenido');
+      sidebar.classList.toggle('cerrado');
+
+      if (sidebar.classList.contains('cerrado')) {
+        contenido.style.marginLeft = "40px";
+        localStorage.setItem('sidebarEstado', 'cerrado');
+      } else {
+        contenido.style.marginLeft = "260px";
+        localStorage.setItem('sidebarEstado', 'abierto');
+      }
+    }
+  </script>
+
+</body>
+</html>

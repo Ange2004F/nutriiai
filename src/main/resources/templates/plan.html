@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Plan Semanal - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .contenido {
+      margin-left: 260px;
+      padding: 30px;
+      transition: margin-left 0.4s ease;
+      text-align: center;
+    }
+
+    h2 {
+      color: #00ffc8;
+      margin-top: 30px;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+    }
+
+    .input-box {
+      margin: 30px auto;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-box input {
+      width: 400px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,255,200,0.4);
+      background-color: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .input-box input:focus {
+      border-color: #00ffc8;
+      box-shadow: 0 0 10px rgba(0,255,200,0.3);
+    }
+
+    .input-box button {
+      padding: 12px 25px;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .input-box button:hover {
+      background: linear-gradient(90deg, #00d4aa, #00aaff);
+      transform: scale(1.05);
+    }
+
+    #respuesta {
+      display: none;
+      margin-top: 25px;
+      font-weight: bold;
+      color: #ffcc00;
+      text-shadow: 0 0 10px rgba(255,204,0,0.4);
+    }
+
+    .dia-box {
+      margin: 25px auto;
+      width: 60%;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(0,255,200,0.3);
+      box-shadow: 0 0 10px rgba(0,255,200,0.2);
+      padding: 20px;
+      text-align: left;
+    }
+
+    .dia-box h3 {
+      color: #00ffc8;
+      border-bottom: 1px solid rgba(0,255,200,0.3);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .comida {
+      margin-top: 10px;
+      color: #ccc;
+      font-size: 15px;
+    }
+
+    .empty {
+      margin-top: 40px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .acciones {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .volver-panel {
+      display: inline-block;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #222;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid #00ffc8;
+      transition: all 0.3s ease;
+    }
+
+    .volver-panel:hover {
+      background-color: #00ffc8;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .btn-borrar {
+      background-color: transparent;
+      color: #ff4d4d;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: 2px solid #ff4d4d;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(255,77,77,0.3);
+    }
+
+    .btn-borrar:hover {
+      background-color: #ff4d4d;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .loader {
+      border: 4px solid #444;
+      border-top: 4px solid #00ffcc;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #modalConfirmar {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #modalConfirmar .modal-content {
+      background: #1c1c1c;
+      color: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,255,200,0.2);
+    }
+
+    #modalConfirmar button {
+      margin: 8px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #modalConfirmar .confirmar {
+      background-color: #ff4d4d;
+      color: white;
+    }
+
+    #modalConfirmar .cancelar {
+      background-color: #555;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div th:replace="~{menu :: menu}"></div>
+
+  <!-- Contenido -->
+  <div class="contenido">
+    <h2>💡 Generar Plan con IA</h2>
+
+    <div class="input-box">
+      <input type="text" id="prompt" placeholder="Ej: quiero un plan alto en proteína y bajo en grasa">
+      <button onclick="consultarIA()">Generar Plan</button>
+    </div>
+
+    <div id="respuesta"></div>
+
+    <h2>📅 Plan de alimentación semanal</h2>
+
+    <!-- 🧠 Mostrar mensaje si no hay planes -->
+    <div th:if="${#lists.isEmpty(planes)}" class="empty">
+      No tienes un plan de alimentación registrado aún.
+    </div>
+
+    <!-- 🧩 Mostrar planes guardados -->
+    <div th:each="plan : ${planes}" class="dia-box">
+      <h3 th:text="${plan.dia}">Lunes</h3>
+      <div class="comida"><strong>Comida:</strong> <span th:text="${plan.comida}"></span></div>
+      <div class="comida"><strong>Plato:</strong> <span th:text="${plan.plato}"></span></div>
+    </div>
+
+    <div class="acciones">
+      <a href="/bienvenido" class="volver-panel">🔙 Volver al inicio</a>
+      <a href="/exportarPDF" class="volver-panel" style="background-color:#00ffc8;color:#000;border-color:#00ffc8;">📄 Exportar PDF</a>
+      <button class="btn-borrar" onclick="mostrarConfirmacion()">🗑 Borrar plan</button>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación -->
+  <div id="modalConfirmar">
+    <div class="modal-content">
+      <h3>¿Estás seguro?</h3>
+      <p>Esta acción eliminará tu plan actual y no se puede deshacer.</p>
+      <form th:action="@{/plan/borrar}" method="post">
+        <button type="submit" class="confirmar">✅ Sí, borrar</button>
+        <button type="button" class="cancelar" onclick="ocultarConfirmacion()">❌ Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function consultarIA() {
+      const prompt = document.getElementById("prompt").value.trim();
+      const respuesta = document.getElementById("respuesta");
+
+      if (!prompt) return;
+
+      respuesta.style.display = 'block';
+      respuesta.innerHTML = "⏳ Consultando con IA... <span class='loader'></span>";
+
+      fetch("/plan/generar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: prompt })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          respuesta.innerHTML = "❌ Error: " + data.error;
+          return;
+        }
+
+        respuesta.innerHTML = "✅ Plan generado correctamente. Mostrando resultados...";
+        setTimeout(() => { window.location.href = "/plan"; }, 2000);
+      })
+      .catch(() => {
+        respuesta.innerHTML = "❌ Error al consultar la IA.";
+      });
+    }
+
+    function mostrarConfirmacion() {
+      document.getElementById('modalConfirmar').style.display = 'flex';
+    }
+
+    function ocultarConfirmacion() {
+      document.getElementById('modalConfirmar').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

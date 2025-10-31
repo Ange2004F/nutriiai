@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${titulo}">Panel del Nutriólogo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 25px;
+      background: rgba(0,255,200,0.1);
+      border-bottom: 1px solid rgba(0,255,200,0.3);
+      box-shadow: 0 0 15px rgba(0,255,200,0.3);
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      color: #00ffc8;
+      text-shadow: 0 0 15px rgba(0,255,200,0.5);
+      margin: 0;
+    }
+
+    .panel {
+      background: rgba(15, 15, 35, 0.9);
+      border: 1px solid rgba(0,255,200,0.3);
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 900px;
+      margin: 0 auto 50px;
+      box-shadow: 0 0 20px rgba(0,255,200,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .panel h2 {
+      color: #00bfff;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      margin-bottom: 25px;
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .info span {
+      color: #00ffc8;
+      font-weight: bold;
+    }
+
+    .opciones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .tarjeta {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,200,0.3);
+      border-radius: 15px;
+      padding: 25px 15px;
+      text-align: center;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,255,200,0.2);
+    }
+
+    .tarjeta:hover {
+      background: linear-gradient(135deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0,255,200,0.6);
+    }
+
+    .tarjeta i {
+      font-size: 40px;
+      margin-bottom: 10px;
+      display: block;
+      color: #00ffc8;
+      transition: color 0.3s;
+    }
+
+    .tarjeta:hover i {
+      color: #0d0d25;
+    }
+
+    .tarjeta h3 {
+      margin: 5px 0 8px;
+      font-size: 18px;
+    }
+
+    .tarjeta p {
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 22px; }
+      .panel { padding: 30px 20px; }
+    }
+  </style>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+  <header>
+    <h1 th:text="${titulo}">Panel del Nutriólogo 🩺</h1>
+  </header>
+
+  <div class="panel">
+    <h2 th:text="${mensaje}">Bienvenido al panel profesional</h2>
+
+    <div class="info">
+      <p><strong>👤 Nombre:</strong> <span th:text="${nombre}">Dr. NutriAI</span></p>
+      <p><strong>📧 Correo:</strong> <span th:text="${correo}">nutri@nutriai.com</span></p>
+      <p><strong>🧩 Rol:</strong> <span th:text="${rol}">Nutriólogo</span></p>
+    </div>
+
+    <div class="opciones">
+      <!-- Ver Pacientes -->
+      <div class="tarjeta" th:attr="onclick='location.href=\'' + @{/nutriologo/pacientes} + '\''">
+        <i class="fas fa-users"></i>
+        <h3>Ver Pacientes</h3>
+        <p>Gestiona los datos, seguimientos y evolución de tus pacientes.</p>
+      </div>
+
+      <!-- Planes Nutricionales -->
+      <div class="tarjeta" th:attr="onclick='location.href=\'' + @{/nutriologo/planes/lista} + '\''">
+        <i class="fas fa-utensils"></i>
+        <h3>Planes Nutricionales</h3>
+        <p>Consulta los planes alimenticios asignados a tus pacientes.</p>
+      </div>
+
+      <!-- NUEVO apartado: Crear o Asignar Plan -->
+      <div class="tarjeta" th:attr="onclick='location.href=\'' + @{/nutriologo/planes/crear} + '\''">
+        <i class="fas fa-clipboard-list"></i>
+        <h3>Crear o Asignar Plan</h3>
+        <p>Asigna un nuevo plan nutricional a un paciente seleccionado.</p>
+      </div>
+
+      <!-- Progreso -->
+      <div class="tarjeta" th:attr="onclick='location.href=\'' + @{/nutriologo/progreso} + '\''">
+        <i class="fas fa-chart-line"></i>
+        <h3>Progreso</h3>
+        <p>Consulta métricas, gráficas y avances de cada paciente.</p>
+      </div>
+
+      <!-- Cerrar Sesión -->
+      <div class="tarjeta" th:attr="onclick='location.href=\'' + @{/logout} + '\''">
+        <i class="fas fa-sign-out-alt"></i>
+        <h3>Cerrar Sesión</h3>
+        <p>Finaliza la sesión de manera segura.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>NutriAI © 2025 — Asistente Inteligente para Profesionales de la Nutrición</footer>
+
+</body>
+</html>

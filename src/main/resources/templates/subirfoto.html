@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>📸 Analizar comida - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      overflow: hidden;
+    }
+
+   
+    .container {
+      background: rgba(25, 25, 50, 0.95);
+      padding: 40px 35px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,255,200,0.3);
+      width: 380px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,255,200,0.2);
+      animation: aparecer 0.7s ease-in-out;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #00ffc8;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #b3ffec;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 15px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="file"] {
+      background-color: rgba(255,255,255,0.08);
+      cursor: pointer;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border: 1px solid #00ffc8;
+      box-shadow: 0 0 8px rgba(0,255,200,0.4);
+    }
+
+    select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #00ffc8 50%), 
+                        linear-gradient(135deg, #00ffc8 50%, transparent 50%);
+      background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+   
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 25px;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,255,200,0.4);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #00d4aa, #00aaff);
+      transform: scale(1.05);
+    }
+
+    
+    .volver-panel {
+      display: inline-block;
+      margin-top: 15px;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #222;
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid #00ffc8;
+      transition: all 0.3s ease;
+    }
+
+    .volver-panel:hover {
+      background-color: #00ffc8;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>📷 Analizar comida por foto</h2>
+
+    <form th:action="@{/analizar-foto}" method="post" enctype="multipart/form-data">
+      <label for="fotoComida">Selecciona una imagen:</label>
+      <input type="file" id="fotoComida" name="fotoComida" accept="image/*" required>
+
+      <label for="momento">¿Qué comida es?</label>
+      <select id="momento" name="momento" required>
+        <option value="Desayuno">🍳 Desayuno</option>
+        <option value="Comida">🍽 Comida</option>
+        <option value="Cena">🌙 Cena</option>
+      </select>
+
+      <button type="submit">Analizar alimento</button>
+    </form>
+
+    <a href="/bienvenido" class="volver-panel">🔙 Volver al inicio</a>
+  </div>
+
+</body>
+</html>

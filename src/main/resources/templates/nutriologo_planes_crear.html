@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear o Asignar Plan - Nutriólogo</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00ffc8;
+      text-shadow: 0 0 15px rgba(0, 255, 200, 0.6);
+      margin-top: 40px;
+    }
+
+    .form-container {
+      width: 85%;
+      max-width: 800px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      box-shadow: 0 0 25px rgba(0, 255, 200, 0.25);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+    }
+
+    .form-container h2 {
+      color: #00bfff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      align-self: flex-start;
+      margin-left: 30px;
+      color: #b3f7f0;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    select, input, textarea {
+      width: 90%;
+      margin: 10px 0 20px 0;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 1rem;
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      box-shadow: 0 0 15px rgba(0, 255, 200, 0.5);
+      transform: scale(1.02);
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      border: none;
+      padding: 14px 35px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #0d0d25;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      margin-top: 10px;
+      box-shadow: 0 0 20px rgba(0,255,200,0.4);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(0,255,200,0.8);
+    }
+
+    .volver {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid rgba(0,255,200,0.4);
+      padding: 10px 25px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .volver:hover {
+      background: #00ffc8;
+      color: #0d0d25;
+      box-shadow: 0 0 20px rgba(0,255,200,0.6);
+    }
+
+    footer {
+      margin-top: 40px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-container { width: 90%; padding: 30px 20px; }
+      select, input, textarea { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🧾 Crear o Asignar Plan Nutricional</h1>
+
+  <div class="form-container">
+    <h2>Selecciona un paciente y define su plan</h2>
+
+    <form th:action="@{/nutriologo/planes/guardar}" method="post">
+
+      <!-- Seleccionar paciente -->
+      <label for="paciente">Seleccionar Paciente:</label>
+      <select id="paciente" name="idUsuario" required>
+        <option value="">-- Selecciona un paciente --</option>
+        <option th:each="p : ${pacientes}"
+                th:value="${p.id}"
+                th:text="${p.nombres + ' ' + p.apellidos}"></option>
+      </select>
+
+      <!-- Día -->
+      <label for="dia">Día:</label>
+      <select id="dia" name="dia" required>
+        <option>Lunes</option>
+        <option>Martes</option>
+        <option>Miércoles</option>
+        <option>Jueves</option>
+        <option>Viernes</option>
+        <option>Sábado</option>
+        <option>Domingo</option>
+      </select>
+
+      <!-- Tipo de comida -->
+      <label for="tipoComida">Tipo de Comida:</label>
+      <select id="tipoComida" name="tipoComida" required>
+        <option>Desayuno</option>
+        <option>Comida</option>
+        <option>Cena</option>
+        <option>Colación</option>
+      </select>
+
+      <!-- Descripción -->
+      <label for="descripcion">Descripción del platillo o plan:</label>
+      <textarea id="descripcion" name="descripcion" rows="4" placeholder="Ejemplo: Ensalada de pollo, arroz integral y jugo natural" required></textarea>
+
+      <button type="submit">💾 Guardar Plan</button>
+    </form>
+
+    <a class="volver" th:href="@{/nutriologo}">⬅ Volver al Panel</a>
+  </div>
+
+  <footer>NutriAI © 2025 — Sistema de Gestión Nutricional</footer>
+
+</body>
+</html>

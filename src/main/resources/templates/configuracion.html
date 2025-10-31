@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚙️ Configuración - NutriAI</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+        color: white;
+        overflow-x: hidden;
+    }
+
+    .contenido {
+        margin-left: 270px;
+        padding: 30px;
+        transition: margin-left 0.4s ease;
+    }
+
+    .sidebar.cerrado + .contenido {
+        margin-left: 40px;
+    }
+
+    .container {
+        max-width: 750px;
+        margin: 40px auto;
+        padding: 30px 35px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255, 0, 255, 0.4);
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+        backdrop-filter: blur(8px);
+    }
+
+    h2 {
+        text-align: center;
+        color: #ff66c4;
+        margin-bottom: 25px;
+        text-shadow: 0 0 8px rgba(255,102,196,0.4);
+    }
+
+    .seccion {
+        margin-bottom: 25px;
+        padding: 20px;
+        border-radius: 14px;
+        background: rgba(20,20,40,0.8);
+        border: 1px solid rgba(0,255,200,0.4);
+        box-shadow: 0 0 10px rgba(0,255,200,0.2);
+    }
+
+    .seccion h3 {
+        margin-top: 0;
+        color: #00ffc8;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+
+    input[type="email"], select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: none;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    input[type="email"]:focus, select:focus {
+        box-shadow: 0 0 10px rgba(0,255,200,0.6);
+        background: rgba(0,255,200,0.05);
+        outline: none;
+    }
+
+    input[type="file"] {
+        color: white;
+        margin-top: 10px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #00ffc8;
+        box-shadow: 0 0 10px rgba(0,255,200,0.6);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(24px);
+    }
+
+    .btn {
+        margin-top: 12px;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        background-color: #00ffc8;
+        color: #111;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #00ccaa;
+        transform: scale(1.03);
+        box-shadow: 0 0 10px rgba(0,255,200,0.6);
+    }
+
+    .mensaje {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    .mensaje.success {
+        color: #00e676;
+        text-shadow: 0 0 6px rgba(0,255,150,0.6);
+    }
+
+    .mensaje.error {
+        color: #ff5252;
+        text-shadow: 0 0 6px rgba(255,82,82,0.5);
+    }
+
+    .preview {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .preview img {
+        width: 110px;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #00ffc8;
+        box-shadow: 0 0 10px rgba(0,255,200,0.3);
+    }
+
+    .volver-panel {
+        display: inline-block;
+        margin-top: 25px;
+        color: #00ffc8;
+        text-decoration: none;
+        font-weight: bold;
+        background-color: rgba(255,255,255,0.05);
+        padding: 10px 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,255,200,0.5);
+    }
+
+    .volver-panel:hover {
+        background-color: #00ffc8;
+        color: #000;
+        transform: scale(1.05);
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        color: rgba(255,255,255,0.5);
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .contenido {
+            margin-left: 20px;
+            padding: 20px;
+        }
+        .container {
+            width: 90%;
+            padding: 25px;
+        }
+    }
+</style>
+<script>
+    function mostrarImagen(event) {
+        const img = document.getElementById('preview-img');
+        img.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
+</head>
+<body>
+<div th:replace="menu :: menu"></div>
+
+<div class="contenido">
+    <div class="container">
+        <h2>⚙️ Configuración de Usuario</h2>
+
+        <div class="mensaje" th:if="${mensaje}"
+             th:classappend="${mensaje.contains('✅')} ? ' success' : ' error'"
+             th:text="${mensaje}">
+        </div>
+
+        <div class="seccion">
+            <h3>🌐 Idioma del sistema</h3>
+            <form method="post" th:action="@{/configuracion}">
+                <input type="hidden" name="accion" value="idioma">
+                <label>Selecciona el idioma:</label>
+                <select name="idioma" onchange="this.form.submit()">
+                    <option value="es" th:selected="${idioma == 'es'}">Español</option>
+                    <option value="en" th:selected="${idioma == 'en'}">Inglés</option>
+                </select>
+            </form>
+        </div>
+
+        <div class="seccion">
+            <h3>📧 Cambiar correo electrónico</h3>
+            <form method="post" th:action="@{/configuracion}">
+                <input type="hidden" name="accion" value="correo">
+                <label>Nuevo correo:</label>
+                <input type="email" name="correoNuevo" placeholder="usuario@nutriai.com" required>
+                <button type="submit" class="btn">Actualizar correo</button>
+            </form>
+        </div>
+
+        <div class="seccion">
+            <h3>🔔 Notificaciones por correo</h3>
+            <form method="post" th:action="@{/configuracion}">
+                <input type="hidden" name="accion" value="notificaciones">
+                <label>Recibir alertas nutricionales:</label>
+                <label class="switch">
+                    <input type="checkbox" name="estado" value="on"
+                           th:checked="${notificaciones}" onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+            </form>
+        </div>
+
+        <div class="seccion">
+            <h3>🔒 Cerrar sesiones activas</h3>
+            <form method="post" th:action="@{/configuracion}">
+                <input type="hidden" name="accion" value="sesiones">
+                <button type="submit" class="btn">Cerrar todas mis sesiones</button>
+            </form>
+        </div>
+
+        <div class="seccion">
+            <h3>🖼️ Cambiar imagen de perfil</h3>
+            <form method="post" th:action="@{/configuracion}" enctype="multipart/form-data">
+                <input type="hidden" name="accion" value="imagen">
+                <label>Selecciona una imagen:</label>
+                <input type="file" name="imagen" accept="image/*" onchange="mostrarImagen(event)" required>
+                <div class="preview">
+                    <img id="preview-img" th:src="@{${imagenFinal}}" alt="Vista previa">
+                </div>
+                <button type="submit" class="btn">Subir imagen</button>
+            </form>
+        </div>
+
+        <div style="text-align:center;">
+            <a th:href="@{/bienvenido}" class="volver-panel">⬅ Volver al inicio</a>
+        </div>
+    </div>
+</div>
+
+<footer>NutriAI © 2025 — Centro de Configuración</footer>
+
+</body>
+</html>

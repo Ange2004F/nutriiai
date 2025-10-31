@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #0d0f26 0%, #000000 100%);
+      color: white;
+    }
+
+    canvas#frutas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .registro-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(20, 20, 30, 0.95);
+      color: white;
+      padding: 45px 35px;
+      border-radius: 20px;
+      box-shadow: 0 0 35px rgba(0, 255, 200, 0.25);
+      width: 380px;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 200, 0.25);
+    }
+
+    .icono {
+      font-size: 45px;
+      color: #ff4d4d;
+      margin-bottom: 10px;
+      animation: latido 1.3s infinite ease-in-out;
+      text-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+    }
+
+    @keyframes latido {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    h2 {
+      margin: 10px 0;
+      color: #00ffc8;
+      text-shadow: 0 0 10px rgba(0,255,200,0.4);
+    }
+
+    p {
+      font-style: italic;
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 25px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background-color: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus, select:focus {
+      border-color: #00ffc8;
+      box-shadow: 0 0 8px rgba(0,255,200,0.4);
+    }
+
+    .grupo {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0,255,200,0.4);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #00d4aa, #00aaff);
+      transform: scale(1.05);
+    }
+
+    a {
+      color: #00ffc8;
+      text-decoration: none;
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      color: #00bfff;
+      text-shadow: 0 0 8px rgba(0,255,200,0.4);
+    }
+
+    .error {
+      color: #ff4d4d;
+      font-weight: bold;
+      margin-bottom: 15px;
+      background: rgba(255,77,77,0.1);
+      border: 1px solid rgba(255,77,77,0.4);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+   
+    .success {
+      color: #00ffb3;
+      font-weight: bold;
+      margin-bottom: 15px;
+      background: rgba(0,255,179,0.1);
+      border: 1px solid rgba(0,255,179,0.4);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .field-error {
+      color: #ff4d4d;
+      font-size: 13px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+      text-align: left;
+      display: block;
+    }
+
+  </style>
+</head>
+<body>
+
+  <canvas id="frutas-bg"></canvas>
+
+  <div class="registro-container">
+    <div class="icono">❤️</div>
+    <h2>Registro de Usuario</h2>
+    <p>"La nutrición no es baja en grasa. Es alta en vida."</p>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+   
+    <div th:if="${mensaje}" class="success" th:text="${mensaje}"></div>
+
+    <form th:action="@{/registro}" method="post" th:object="${usuario}">
+
+      <input type="text" th:field="*{nombres}" name="nombres" placeholder="Nombres" required
+             pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
+             title="Solo se permiten letras y espacios"
+             oninput="this.value=this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g,'')">
+      <span th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}" class="field-error"></span>
+
+      <input type="text" th:field="*{apellidos}" name="apellidos" placeholder="Apellidos" required
+             pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
+             title="Solo se permiten letras y espacios"
+             oninput="this.value=this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g,'')">
+      <span th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" class="field-error"></span>
+
+      <input type="email" th:field="*{correo}" name="correo" placeholder="Correo electrónico" required>
+      <span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="field-error"></span>
+
+      <input type="password" th:field="*{password}" name="clave" placeholder="Contraseña" required minlength="6">
+      <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="field-error"></span>
+
+      <div class="grupo">
+        <input type="number" th:field="*{edad}" name="edad" placeholder="Edad" required min="1" max="120">
+        <select th:field="*{sexo}" name="sexo" required>
+          <option disabled selected value="">Sexo</option>
+          <option value="M">Masculino</option>
+          <option value="F">Femenino</option>
+        </select>
+      </div>
+      <span th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}" class="field-error"></span>
+
+      <input type="number" th:field="*{peso}" name="peso" placeholder="Peso (kg)" required step="0.1" min="20" max="300">
+      <span th:if="${#fields.hasErrors('peso')}" th:errors="*{peso}" class="field-error"></span>
+
+      <input type="number" th:field="*{altura}" name="altura" placeholder="Altura (cm)" required step="0.1" min="50" max="250">
+      <span th:if="${#fields.hasErrors('altura')}" th:errors="*{altura}" class="field-error"></span>
+
+      <select th:field="*{nivelActividad}" name="nivel_actividad" required>
+        <option disabled selected value="">Nivel de actividad</option>
+        <option value="Sedentario">Sedentario</option>
+        <option value="Ligero">Ligero</option>
+        <option value="Moderado">Moderado</option>
+        <option value="Activo">Activo</option>
+        <option value="Muy Activo">Muy Activo</option>
+      </select>
+      <span th:if="${#fields.hasErrors('nivelActividad')}" th:errors="*{nivelActividad}" class="field-error"></span>
+
+      <select th:field="*{objetivo}" name="objetivo" required>
+        <option disabled selected value="">Objetivo</option>
+        <option value="bajar de peso">Bajar de peso</option>
+        <option value="subir de peso">Subir de peso</option>
+        <option value="ganar masa muscular">Ganar masa muscular</option>
+      </select>
+      <span th:if="${#fields.hasErrors('objetivo')}" th:errors="*{objetivo}" class="field-error"></span>
+
+      <button type="submit">Registrarse</button>
+      <a th:href="@{/login}"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+    </form>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('frutas-bg');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const frutas = ['🍎','🍌','🍇','🍓','🥝','🍍','🍉','🥑','🍒','🍑','🍊','🍈','🍏','🍋','🫐'];
+    let objetos = [];
+
+    function crearFrutas() {
+      for (let i = 0; i < 35; i++) {
+        objetos.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: 24 + Math.random() * 20,
+          speed: 0.3 + Math.random() * 0.8,
+          emoji: frutas[Math.floor(Math.random() * frutas.length)],
+          dx: Math.random() * 0.5,
+          dy: Math.random() * 0.5
+        });
+      }
+    }
+
+    function animar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      objetos.forEach(obj => {
+        ctx.font = obj.size + 'px serif';
+        ctx.fillText(obj.emoji, obj.x, obj.y);
+        obj.y += obj.speed;
+        obj.x += Math.sin(Date.now() * 0.001 + obj.y * 0.01) * obj.dx;
+        if (obj.y > canvas.height) {
+          obj.y = -30;
+          obj.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(animar);
+    }
+
+    crearFrutas();
+    animar();
+  </script>
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

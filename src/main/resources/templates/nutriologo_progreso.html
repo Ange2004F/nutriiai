@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${titulo}">Progreso de Pacientes - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 25px;
+      background: rgba(0,255,200,0.1);
+      border-bottom: 1px solid rgba(0,255,200,0.3);
+      box-shadow: 0 0 15px rgba(0,255,200,0.3);
+    }
+
+    header h1 {
+      color: #00ffc8;
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+    }
+
+    .contenedor {
+      width: 90%;
+      max-width: 1100px;
+      margin: 40px auto;
+      background: rgba(15,15,35,0.85);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,200,0.2);
+      border: 1px solid rgba(0,255,200,0.3);
+      padding: 30px 35px;
+      backdrop-filter: blur(8px);
+    }
+
+    .mensaje-error {
+      text-align: center;
+      color: #ff6666;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .top-bar input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,255,200,0.3);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      outline: none;
+      width: 250px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .top-bar input:focus {
+      border-color: #00ffc8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,255,200,0.3);
+    }
+
+    thead {
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      color: #0d0d25;
+    }
+
+    th, td {
+      padding: 14px 10px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    th {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    td {
+      color: #ddd;
+      font-size: 15px;
+    }
+
+    tr:hover td {
+      background: rgba(0,255,200,0.1);
+      transition: background 0.3s;
+    }
+
+    .nota {
+      font-style: italic;
+      color: #b3ffec;
+    }
+
+    .badge {
+      background: #00ffc8;
+      color: #0d0d25;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .boton-volver {
+      display: inline-block;
+      margin-top: 25px;
+      background-color: #00ffc8;
+      color: #0d0d25;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(0,255,200,0.4);
+      transition: all 0.3s ease;
+    }
+
+    .boton-volver:hover {
+      background-color: #00ccaa;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 800px) {
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+      .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .top-bar input {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+  <header>
+    <h1 th:text="${titulo}">Progreso de Pacientes 📈</h1>
+  </header>
+
+  <div class="contenedor">
+    <div class="top-bar">
+      <p>Monitorea la evolución física y nutricional de tus pacientes.</p>
+      <input type="text" placeholder="🔍 Buscar paciente...">
+    </div>
+
+    <p th:if="${error}" class="mensaje-error" th:text="${error}"></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>Fecha</th>
+          <th>Peso Actual (kg)</th>
+          <th>Calorías Consumidas</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="p : ${progreso}">
+          <td th:text="${p.nombre}">Juan Pérez</td>
+          <td th:text="${#dates.format(p.fecha, 'dd/MM/yyyy')}">12/10/2025</td>
+          <td><span class="badge" th:text="${p.peso_actual}">70</span></td>
+          <td><span class="badge" th:text="${p.kcal_consumidas} + ' kcal'">2200 kcal</span></td>
+          <td th:text="${p.nota}" class="nota">Buen avance</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(progreso)}">
+          <td colspan="5" style="text-align:center; opacity:0.7;">No hay registros de progreso disponibles.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="text-align:center;">
+      <a href="/nutriologo" class="boton-volver">⬅ Volver al Panel</a>
+    </div>
+  </div>
+
+  <footer>NutriAI © 2025 — Seguimiento Inteligente del Progreso Nutricional</footer>
+</body>
+</html>

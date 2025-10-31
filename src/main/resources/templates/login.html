@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>🔐 Iniciar Sesión - NutriAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      overflow: hidden;
+    }
+
+    .fondo-frutas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .fruta {
+      position: absolute;
+      font-size: 32px;
+      opacity: 0.2;
+      animation: flotar 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes flotar {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); }
+      25% { transform: translateY(-40px) translateX(30px) rotate(15deg); }
+      50% { transform: translateY(-80px) translateX(-20px) rotate(-20deg); }
+      75% { transform: translateY(-40px) translateX(15px) rotate(10deg); }
+      100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      background: rgba(15, 15, 35, 0.9);
+      padding: 50px 35px;
+      border-radius: 25px;
+      box-shadow:
+        0 0 20px rgba(0, 255, 128, 0.2),
+        0 0 40px rgba(0, 128, 255, 0.2),
+        0 0 60px rgba(255, 0, 128, 0.1);
+      border: 1px solid rgba(0,255,200,0.3);
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      margin: 12vh auto;
+      backdrop-filter: blur(14px);
+      transition: all 0.4s ease-in-out;
+      animation: aparecer 1s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(-25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow:
+        0 0 30px rgba(0, 255, 128, 0.3),
+        0 0 60px rgba(0, 128, 255, 0.25);
+    }
+
+    h2 {
+      font-size: 28px;
+      color: #00ffc8;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(0,255,200,0.5);
+    }
+
+    p.frase {
+      font-style: italic;
+      color: #bbb;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: #ff4d4d;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .input-field i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ffc8;
+      font-size: 18px;
+    }
+
+    .input-field input {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+
+    .input-field input:focus {
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 10px rgba(0,255,200,0.4);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #0d0d25;
+      background: linear-gradient(90deg, #00ffc8, #00bfff);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0,255,200,0.5);
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 25px;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      margin-top: 25px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 35px 25px;
+      }
+    }
+
+   
+    .field-error {
+      color: #ff4d4d;
+      font-size: 13px;
+      margin-top: 5px;
+      display: block;
+      text-align: left;
+      padding-left: 40px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="fondo-frutas" id="fondo-frutas"></div>
+
+  <div class="card">
+    <h2>🔐 Iniciar Sesión</h2>
+    <p class="frase">"Cada comida es una oportunidad de nutrir tu vida."</p>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form th:action="@{/login}" method="post" th:object="${usuario}">
+      <div class="input-field">
+        <i class="fas fa-envelope"></i>
+        <input type="email" th:field="*{correo}" name="correo" placeholder="Correo electrónico" 
+               required 
+               pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"
+               title="Introduce un correo válido (ejemplo@dominio.com)">
+       
+        <span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="field-error"></span>
+      </div>
+
+      <div class="input-field">
+        <i class="fas fa-lock"></i>
+        <input type="password" th:field="*{password}" name="password" placeholder="Contraseña" 
+               required minlength="6"
+               title="La contraseña debe tener al menos 6 caracteres">
+       
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="field-error"></span>
+      </div>
+
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <a th:href="@{/}"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+  </div>
+
+  <footer>NutriAI © 2025 — Tu Asistente Nutricional Inteligente</footer>
+
+  <script>
+    const frutas = ["🍎","🍌","🍇","🍓","🥝","🍍","🥑","🍒","🍉","🍑","🥦","🥕","🍊","🍋"];
+    const fondo = document.getElementById("fondo-frutas");
+    for (let i = 0; i < 25; i++) {
+      const fruta = document.createElement("span");
+      fruta.classList.add("fruta");
+      fruta.style.top = Math.random() * 100 + "%";
+      fruta.style.left = Math.random() * 100 + "%";
+      fruta.style.animationDelay = Math.random() * 10 + "s";
+      fruta.textContent = frutas[i % frutas.length];
+      fondo.appendChild(fruta);
+    }
+  </script>
+</body>
+</html>

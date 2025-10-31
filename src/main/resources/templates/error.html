@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>❌ Error - NutriAI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0d0d25 0%, #1a1a3d 100%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .error-box {
+      background: rgba(255,255,255,0.05);
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(255, 80, 80, 0.5);
+      border: 1px solid rgba(255, 80, 80, 0.4);
+      backdrop-filter: blur(8px);
+      max-width: 600px;
+      width: 85%;
+      animation: aparecer 0.6s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      color: #ff4d4d;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+    }
+
+    h3 {
+      color: #00ffc8;
+      margin-top: 25px;
+      font-weight: 600;
+    }
+
+    p {
+      color: #ccc;
+      font-size: 1.1rem;
+    }
+
+    pre {
+      text-align: left;
+      background: rgba(0,0,0,0.6);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #ffbcbc;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      overflow-x: auto;
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.1);
+    }
+
+    a.volver {
+      display: inline-block;
+      margin-top: 25px;
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: rgba(255,255,255,0.05);
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,200,0.5);
+      transition: all 0.3s ease;
+    }
+
+    a.volver:hover {
+      background-color: #00ffc8;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="error-box">
+    <h1>❌ Ha ocurrido un error</h1>
+    <p>Por favor, intenta nuevamente o contacta al administrador.</p>
+
+    <h3>Detalles del error:</h3>
+    <pre th:text="${errorMessage}">Error desconocido</pre>
+
+    <!-- 🔹 Redirección dinámica según el rol del usuario -->
+    <div>
+      <a class="volver"
+         th:if="${rol == 'Administrador'}"
+         th:href="@{/admin}">⬅ Volver al Panel de Administración</a>
+
+      <a class="volver"
+         th:if="${rol == 'Nutriologo'}"
+         th:href="@{/nutriologo}">⬅ Volver al Panel de Nutriólogo</a>
+
+      <a class="volver"
+         th:if="${rol == 'Paciente' or rol == 'Usuario'}"
+         th:href="@{/bienvenido}">⬅ Volver al Inicio</a>
+
+      <!-- En caso de que el rol no esté definido -->
+      <a class="volver"
+         th:if="${rol == null}"
+         th:href="@{/login}">⬅ Ir al Inicio de Sesión</a>
+    </div>
+  </div>
+
+  <footer>NutriAI © 2025 — Sistema de Gestión Nutricional</footer>
+
+</body>
+</html>
